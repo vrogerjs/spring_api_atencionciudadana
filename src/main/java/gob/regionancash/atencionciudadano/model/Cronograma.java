@@ -30,6 +30,9 @@ public class Cronograma {
     @Column(nullable = false, length = 10)
     private Integer dia;
 
+    @Column(nullable = true)
+    private String texto;
+
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Column(nullable = false, columnDefinition = "TIME")
     private LocalTime horaini;
@@ -42,10 +45,10 @@ public class Cronograma {
     private int limite;
 
     @Column(nullable = false, length = 1)
-    private Integer activo;
+    private Integer activo=1;
 
     @Column(nullable = false, length = 1)
-    private Integer borrado;
+    private Integer borrado=0;
 
     @ManyToOne
     @JoinColumn(name="dependencia_id", nullable=false)

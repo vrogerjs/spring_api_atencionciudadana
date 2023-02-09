@@ -18,6 +18,13 @@ public interface CronogramaRepository extends JpaRepository<Cronograma, Long> {
     @Query("SELECT c FROM Cronograma c WHERE (:dependenciaId IS NULL OR c.dependencia.id =:dependenciaId)")
     Page findAllByDependencia(PageRequest pageable, Long dependenciaId);
 
+
+    @Query("SELECT c FROM Cronograma c WHERE c.dia=:dia AND (:IdDependencia IS NULL OR c.dependencia.id =:IdDependencia)")
+    abstract List<Cronograma> findByDependenciaAndDia(Long IdDependencia, Integer dia);
+
+    @Query("SELECT c FROM Cronograma c WHERE (:dependenciaId IS NULL OR c.dependencia.id =:dependenciaId)")
+    abstract List<Cronograma> findByIdDependencia(Long dependenciaId);
+
    // public abstract List<Cronograma> findByIdDependencia(Dependencia dependencia);
 
 }

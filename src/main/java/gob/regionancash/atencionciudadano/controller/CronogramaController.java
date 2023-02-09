@@ -39,15 +39,24 @@ public class CronogramaController {
         return cronogramaRepository.findAll();
     }
 
+    @GetMapping("/dependencia/{id}")
+    public List<Cronograma> getCronogramaById(@PathVariable(value = "id") Long dependenciaId) {
+        return cronogramaRepository.findByIdDependencia(dependenciaId);
+
+    }
+
     @GetMapping("/fechaDisponible/{name}")
-    public Object getFechaDisponible(@PathVariable(value = "name") String dependenciaName) throws Exception {
+    public Object getFechaDisponible(@PathVariable(value = "name") String dependenciaName, @RequestParam(name = "dia") Integer dia) throws Exception {
 
         Dependencia d = dependenciaRepository.getByDependencia(dependenciaName);
 
         Calendar c = Calendar.getInstance();
-        List<Cronograma> l = cronogramaRepository.findByDependencia(d);
+
+        List<Cronograma> l = cronogramaRepository.findByDependenciaAndDia(d.getId(), dia);
         List l2 = new ArrayList();
         Cronograma cronograma = l.get(0);
+
+        //      return l;
 
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -100,7 +109,9 @@ public class CronogramaController {
         HashMap m = new HashMap();
         m.put("times", l2);
         m.put("dependency", d.getId());
+
         return m;
+
     }
 
     @GetMapping("/{from}/{to}")
