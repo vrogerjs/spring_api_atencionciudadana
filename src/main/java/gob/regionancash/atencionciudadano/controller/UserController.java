@@ -17,6 +17,13 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+
+    @GetMapping
+    public ResponseEntity sayHello(Authentication authentication) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+  return ResponseEntity.ok(userDetails);
+    }
+
     @Autowired
     private UserRepository userRepository;
 
