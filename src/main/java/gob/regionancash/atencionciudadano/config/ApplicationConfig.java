@@ -1,6 +1,7 @@
 package gob.regionancash.atencionciudadano.config;
 
 //import gob.regionancash.atencionciudadano.user.UserRepository;
+import gob.regionancash.atencionciudadano.model.User;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
@@ -26,16 +27,20 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
 //loadUserByUsername
-        return username -> new UserDetails(){
+        return username -> {
 
-          User u=new User();
+
+          User u = new User();
           return u;
+
+
+        };
       
     };
     
     /*repository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));*/
-  }
+
 
   @Bean
   public AuthenticationProvider authenticationProvider() {

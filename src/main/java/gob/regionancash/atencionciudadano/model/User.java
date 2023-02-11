@@ -7,8 +7,14 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,8 +34,20 @@ public class User implements UserDetails{
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String email;
+
+    @Column(nullable = false)
+    private Integer directory;
+
+    @ManyToOne
+    @JoinColumn(name="tipouser_id", nullable=false)
+    private Tipouser tipouser;
+
+    @ManyToOne
+    @JoinColumn(name="dependencia_id", nullable=false)
+    private Dependencia dependencia;
+
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,23 +59,17 @@ public class User implements UserDetails{
     @Column(name = "updated_at", nullable = true)
     private Date updatedAt;
 
+    @Transient
+    List<GrantedAuthority> authorities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      List<GrantedAuthority> authorities = new ArrayList<>();
-                  /*for (Role role: roles) {
-                      authorities.add(new SimpleGrantedAuthority(role.getName()));
-                      role.getPrivileges().stream()
-                      .map(p -> new SimpleGrantedAuthority(p.getName()))
-                      .forEach(authorities::add);
-                  }*/
-                  authorities.add(new SimpleGrantedAuthority("GRAND_1"));
-                
       return authorities;//List.of(new SimpleGrantedAuthority(role.name()));
     }
   
     @Override
     public String getPassword() {
-      return password;
+      return "password";
     }
   
     @Override

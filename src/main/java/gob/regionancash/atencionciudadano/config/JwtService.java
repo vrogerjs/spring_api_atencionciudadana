@@ -8,26 +8,18 @@ import io.jsonwebtoken.security.Keys;
 
 import java.io.File;
 import java.io.FileReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.security.Key;
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
-import javax.crypto.spec.SecretKeySpec;
-import javax.management.relation.RoleResult;
-
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -64,12 +56,6 @@ public class JwtService {
   }
 
   public Claims extractAllClaims(String token) {
-
-    Base64.Decoder decoder = Base64.getUrlDecoder();
-    String[] chunks = token.split("\\.");
-    String header = new String(decoder.decode(chunks[0]));
-    String payload = new String(decoder.decode(chunks[1]));
-    System.out.println(header);
     SignatureAlgorithm sa = SignatureAlgorithm.HS256;
     try {
       Key rsa=readPublicKey(new File(publicKeyFile));

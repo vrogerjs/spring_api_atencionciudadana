@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,28 +17,17 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "dependencias")
+@Table(name = "tipousers")
 @EntityListeners(AuditingEntityListener.class)
-public class Dependencia {
-
-
-
+public class Tipouser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Column(nullable = false, length = 256, unique = true)
-    private String dependencia;
-
-    @Column(nullable = true, length = 32)
-    private String abreviatura;
-
-    @Column(nullable = true, length = 256)
-    private String nombaperesponsable;
-
-    @Column(nullable = true, length = 256)
-    private String cargoresponsable;
+    @Size(max = 128)
+    @Column(nullable = false, length = 128)
+    private String tipo;
 
     @Column(nullable = false, length = 1)
     private Integer activo=1;
@@ -46,15 +36,7 @@ public class Dependencia {
     private Integer borrado=0;
 
     @JsonIgnore
-    @OneToMany(mappedBy="dependencia")
-    private Set<Cronograma> cronogramas;
-
-    @JsonIgnore
-    @OneToMany(mappedBy="dependencia")
-    private Set<Atencion> atencions;
-
-    @JsonIgnore
-    @OneToMany(mappedBy="dependencia")
+    @OneToMany(mappedBy="tipouser")
     private Set<User> users;
 
     @CreationTimestamp
@@ -66,5 +48,4 @@ public class Dependencia {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = true)
     private Date updatedAt;
-
 }

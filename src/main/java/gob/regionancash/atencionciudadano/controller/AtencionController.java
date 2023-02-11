@@ -1,10 +1,7 @@
 package gob.regionancash.atencionciudadano.controller;
 
 import gob.regionancash.atencionciudadano.exception.ResourceNotFoundException;
-import gob.regionancash.atencionciudadano.model.Atencion;
-import gob.regionancash.atencionciudadano.model.Cronograma;
-import gob.regionancash.atencionciudadano.model.Dependencia;
-import gob.regionancash.atencionciudadano.model.Persona;
+import gob.regionancash.atencionciudadano.model.*;
 import gob.regionancash.atencionciudadano.repository.AtencionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,6 +32,21 @@ public class AtencionController {
     public Page getAllAtenciones(@PathVariable(value = "from") int from, @PathVariable(value = "to") int to,
                                  @RequestParam(name = "dependencia", required = false) Long IdDependencia, @RequestParam(name = "activo") Integer activo
     ) throws Exception {
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
+        var pageable = PageRequest.of(from, to);
+        return atencionRepository.findAllByDependencia(pageable, IdDependencia, activo);
+    }
+
+    @GetMapping("/demo/{from}/{to}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page getAllAtenciones(Authentication authentication, @PathVariable(value = "from") int from, @PathVariable(value = "to") int to, @RequestParam(name = "dependencia", required = false) Long IdDependencia, @RequestParam(name = "activo") Integer activo
+    ) throws Exception {
+
+        User userDetails = (User) authentication.getPrincipal();
+        userDetails.getDirectory();
+//        userDetails.getAuthorities().contains();
+        System.out.println(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("GRAND_1")));
+
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
         var pageable = PageRequest.of(from, to);
         return atencionRepository.findAllByDependencia(pageable, IdDependencia, activo);
