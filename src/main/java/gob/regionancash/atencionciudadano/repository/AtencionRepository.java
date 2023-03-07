@@ -20,7 +20,7 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
     @Query("SELECT COUNT(a) FROM Atencion a WHERE a.dependencia=:dependencia and DATE(a.fecha) = DATE(:fecha)")
     abstract int getCountByDependenciaAndDate(Dependencia dependencia,Date fecha);
 
-    @Query("SELECT a.fecha,a.horaini FROM Atencion a WHERE a.dependencia=:dependencia and DATE(a.fecha) = DATE(:fecha)")
+    @Query("SELECT a.fecha,a.horaIni FROM Atencion a WHERE a.dependencia=:dependencia and DATE(a.fecha) = DATE(:fecha)")
     abstract List getCountByDependenciaAndDateAndFechaIni(Dependencia dependencia,Date fecha);
 
     abstract List<Atencion> findByPersona(Persona persona);

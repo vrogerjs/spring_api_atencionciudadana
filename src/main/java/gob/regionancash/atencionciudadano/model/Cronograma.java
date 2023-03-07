@@ -3,9 +3,7 @@ package gob.regionancash.atencionciudadano.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,6 +16,7 @@ import java.util.Date;
 @Setter
 @ToString
 @Entity
+@Builder
 @Table(name = "cronogramas")
 @EntityListeners(AuditingEntityListener.class)
 public class Cronograma {
@@ -35,19 +34,21 @@ public class Cronograma {
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Column(nullable = false, columnDefinition = "TIME")
-    private LocalTime horaini;
+    private LocalTime horaIni;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Column(nullable = false, columnDefinition = "TIME")
-    private LocalTime horafin;
+    private LocalTime horaFin;
 
     @Column(nullable = false)
     private int limite;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer activo=1;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer borrado=0;
 
     @ManyToOne

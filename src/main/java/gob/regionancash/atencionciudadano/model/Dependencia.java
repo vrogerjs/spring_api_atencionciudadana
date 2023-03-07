@@ -2,9 +2,7 @@ package gob.regionancash.atencionciudadano.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,31 +16,31 @@ import java.util.Set;
 @Entity
 @Table(name = "dependencias")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Dependencia {
-
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 256, unique = true)
-    private String dependencia;
+    private String name;
 
     @Column(nullable = true, length = 32)
     private String abreviatura;
 
     @Column(nullable = true, length = 256)
-    private String nombaperesponsable;
+    private String nApellidoNombreresponsable;
 
     @Column(nullable = true, length = 256)
     private String cargoresponsable;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer activo=1;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer borrado=0;
 
     @JsonIgnore
@@ -59,12 +57,12 @@ public class Dependencia {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private Date createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = true)
+    @Column(nullable = true)
     private Date updatedAt;
 
 }

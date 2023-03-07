@@ -58,8 +58,8 @@ public class UserController {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado: " + userId));
 
-        if (userDetalles.getNombape() != null)
-            user.setNombape(userDetalles.getNombape());
+        if (userDetalles.getNApellidoNombre() != null)
+            user.setNApellidoNombre(userDetalles.getNApellidoNombre());
 
         if (userDetalles.getName() != null)
             user.setName(userDetalles.getName());

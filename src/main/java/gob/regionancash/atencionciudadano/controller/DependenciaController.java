@@ -41,8 +41,8 @@ public class DependenciaController {
     }
 
     @GetMapping("/search/{name}")
-    public ResponseEntity<Dependencia> getByDependencia(@PathVariable(value = "name") String dependenciaDependencia) throws ResourceNotFoundException {
-        Dependencia dependencia = dependenciaRepository.getByDependencia(dependenciaDependencia);
+    public ResponseEntity<Dependencia> getByDependencia(@PathVariable(value = "name") String dependenciaName) throws ResourceNotFoundException {
+        Dependencia dependencia = dependenciaRepository.getByName(dependenciaName);
         return ResponseEntity.ok().body(dependencia);
     }
 
@@ -52,21 +52,21 @@ public class DependenciaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Dependencia> updateDependencia(@PathVariable(value = "id") Long dependenciaId, @Valid @RequestBody Dependencia dependenciaDetalles) throws ResourceNotFoundException {
+    public ResponseEntity<Dependencia> updateDependencia(@PathVariable(value = "id") Long dependenciaId, @Valid @RequestBody Dependencia dependenciaData) throws ResourceNotFoundException {
 
         Dependencia dependencia = dependenciaRepository.findById(dependenciaId).orElseThrow(() -> new ResourceNotFoundException("Dependencia no encontrada: " + dependenciaId));
 
-        if (dependenciaDetalles.getDependencia() != null)
-            dependencia.setDependencia(dependenciaDetalles.getDependencia());
+        if (dependenciaData.getName() != null)
+            dependencia.setName(dependenciaData.getName());
 
-        if (dependenciaDetalles.getAbreviatura() != null)
-            dependencia.setAbreviatura(dependenciaDetalles.getAbreviatura());
+        if (dependenciaData.getAbreviatura() != null)
+            dependencia.setAbreviatura(dependenciaData.getAbreviatura());
 
-        if (dependenciaDetalles.getNombaperesponsable() != null)
-            dependencia.setNombaperesponsable(dependenciaDetalles.getNombaperesponsable());
+        if (dependenciaData.getNApellidoNombreresponsable() != null)
+            dependencia.setNApellidoNombreresponsable(dependenciaData.getNApellidoNombreresponsable());
 
-        if (dependenciaDetalles.getCargoresponsable() != null)
-            dependencia.setCargoresponsable(dependenciaDetalles.getCargoresponsable());
+        if (dependenciaData.getCargoresponsable() != null)
+            dependencia.setCargoresponsable(dependenciaData.getCargoresponsable());
 
         dependencia.setUpdatedAt(new Date());
         Dependencia updatedDependencia = dependenciaRepository.save(dependencia);

@@ -17,9 +17,9 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "tipousers")
+@Table(name = "tipo_users")
 @EntityListeners(AuditingEntityListener.class)
-public class Tipouser {
+public class TipoUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class Tipouser {
     private Integer borrado=0;
 
     @JsonIgnore
-    @OneToMany(mappedBy="tipouser")
+    @OneToMany(mappedBy="tipoUser")
     private Set<User> users;
 
     @CreationTimestamp

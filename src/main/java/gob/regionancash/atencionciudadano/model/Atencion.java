@@ -2,9 +2,7 @@ package gob.regionancash.atencionciudadano.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -19,6 +17,7 @@ import java.util.Date;
 @Setter
 @ToString
 @Entity
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Table(name = "atencions")
 @EntityListeners(AuditingEntityListener.class)
 public class Atencion {
@@ -34,20 +33,20 @@ public class Atencion {
     //private String nrosisgedo;
 
     @Column(nullable = false, length = 16)
-    private String nroexpediente;
+    private String nroExpediente;
 
     @Column(nullable = false, length = 2048)
     private String motivo;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Column(nullable = false, columnDefinition = "TIME")
-    private LocalTime horaini;
+    private LocalTime horaIni;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Column(nullable = true, columnDefinition = "TIME")
-    private LocalTime horafin;
+    private LocalTime horaFin;
 
-    @Column(nullable = true, columnDefinition = "DATE")
+    @Column(nullable = false, columnDefinition = "DATE")
     private LocalDate fecha;
 
     @ManyToOne
@@ -63,19 +62,21 @@ public class Atencion {
     private Persona persona;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer activo=1;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer borrado=0;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private Date createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = true)
+    @Column(nullable = true)
     private Date updatedAt;
 
 
