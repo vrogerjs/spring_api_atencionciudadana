@@ -4,9 +4,9 @@ package gob.regionancash.atencionciudadano.config;
 import gob.regionancash.atencionciudadano.model.User;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
-import java.util.ArrayList;
+import java.util.*;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,26 +24,34 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
+
+
     @Bean
     public UserDetailsService userDetailsService() {
-//loadUserByUsername
-        return username -> {
 
+        return new UserDetailsService(){
 
-          User u = new User();
-          return u;
-
-
-        };
-      
+          @Override
+          public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        
+          //username -> {
+        
+          //read from db info from user and permision
+                /*repository.findByEmail(username)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));*/
+            User u = new User();
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            String[] perms = new String[]{};
+            for (String perm : perms)
+                authorities.add(new SimpleGrantedAuthority(perm));
+            u.setAuthorities(authorities);
+            return u;
+        }
+      };
     };
     
-    /*repository.findByEmail(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));*/
-
-
   @Bean
-  public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
     authProvider.setUserDetailsService(userDetailsService());
     authProvider.setPasswordEncoder(passwordEncoder());

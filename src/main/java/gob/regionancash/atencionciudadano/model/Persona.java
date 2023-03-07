@@ -2,9 +2,7 @@ package gob.regionancash.atencionciudadano.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
 @Table(name = "personas")
 @EntityListeners(AuditingEntityListener.class)
@@ -38,16 +37,16 @@ public class Persona {
     private String nroDocumento;
 
     @Size(max = 256)
-    @Column(nullable = true, length = 256)
-    private String nombape;
+    @Column(nullable = true, length = 200)
+    private String apellidoNombre;
 
     @Size(max = 512)
     @Column(nullable = true, length = 512)
-    private String razonsocial;
+    private String razonSocial;
 
     @Size(max = 512)
     @Column(nullable = true, length = 512)
-    private String representantelegal;
+    private String representanteLegal;
 
     @Size(max = 512)
     @Column(nullable = true, length = 512)
@@ -58,9 +57,11 @@ public class Persona {
     private String celular;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer activo=1;
 
     @Column(nullable = false, length = 1)
+    @Builder.Default
     private Integer borrado=0;
 
     @JsonIgnore
@@ -69,12 +70,12 @@ public class Persona {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private Date createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = true)
+    @Column(nullable = true)
     private Date updatedAt;
 
 

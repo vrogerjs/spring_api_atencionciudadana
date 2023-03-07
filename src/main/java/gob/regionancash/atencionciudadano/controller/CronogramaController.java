@@ -48,7 +48,7 @@ public class CronogramaController {
     @GetMapping("/fechaDisponible/{name}")
     public Object getFechaDisponible(@PathVariable(value = "name") String dependenciaName, @RequestParam(name = "dia") Integer dia) throws Exception {
 
-        Dependencia d = dependenciaRepository.getByDependencia(dependenciaName);
+        Dependencia d = dependenciaRepository.getByName(dependenciaName);
 
         Calendar c = Calendar.getInstance();
 
@@ -67,14 +67,14 @@ public class CronogramaController {
         for (int i = 0; i < 4; i++) {
 
             //////ini set times
-            c.set(Calendar.HOUR_OF_DAY, cronograma.getHoraini().getHour());
-            c.set(Calendar.MINUTE, cronograma.getHoraini().getMinute());
-            c.set(Calendar.SECOND, cronograma.getHoraini().getSecond());
+            c.set(Calendar.HOUR_OF_DAY, cronograma.getHoraIni().getHour());
+            c.set(Calendar.MINUTE, cronograma.getHoraIni().getMinute());
+            c.set(Calendar.SECOND, cronograma.getHoraIni().getSecond());
             List<Object[]> times = new ArrayList();
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
-            long max = cronograma.getHorafin().getHour() * 10000 + cronograma.getHorafin().getMinute() * 100 + cronograma.getHorafin().getSecond();
-            long max2 = cronograma.getHoraini().getHour() * 10000 + cronograma.getHoraini().getMinute() * 100 + cronograma.getHoraini().getSecond();
+            long max = cronograma.getHoraFin().getHour() * 10000 + cronograma.getHoraFin().getMinute() * 100 + cronograma.getHoraFin().getSecond();
+            long max2 = cronograma.getHoraIni().getHour() * 10000 + cronograma.getHoraIni().getMinute() * 100 + cronograma.getHoraIni().getSecond();
 
             long rest = max - max2;
             long mult = rest * 60;
@@ -141,11 +141,11 @@ public class CronogramaController {
         if (cronogramaDetalles.getDia() != null)
             cronograma.setDia(cronogramaDetalles.getDia());
 
-        if (cronogramaDetalles.getHoraini() != null)
-            cronograma.setHoraini(cronogramaDetalles.getHoraini());
+        if (cronogramaDetalles.getHoraIni() != null)
+            cronograma.setHoraIni(cronogramaDetalles.getHoraIni());
 
-        if (cronogramaDetalles.getHorafin() != null)
-            cronograma.setHorafin(cronogramaDetalles.getHorafin());
+        if (cronogramaDetalles.getHoraFin() != null)
+            cronograma.setHoraFin(cronogramaDetalles.getHoraFin());
 
         if (cronogramaDetalles.getActivo() != null)
             cronograma.setActivo(cronogramaDetalles.getActivo());

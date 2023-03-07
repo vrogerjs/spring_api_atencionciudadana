@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface DependenciaRepository extends JpaRepository<Dependencia, Long> {
 
-    public abstract Dependencia getByDependencia(String dependencia);
+    public abstract Dependencia getByName(String dependencia);
 
 }

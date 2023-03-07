@@ -12,14 +12,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.reactive.function.client.WebClient;
+import gob.regionancash.atencionciudadano.service.ContractService;
 
 @RestController
 @RequestMapping("/atencion")
@@ -28,28 +35,37 @@ public class AtencionController {
     @Autowired
     private AtencionRepository atencionRepository;
 
-    @GetMapping("/{from}/{to}")
-    public Page getAllAtenciones(@PathVariable(value = "from") int from, @PathVariable(value = "to") int to,
-                                 @RequestParam(name = "dependencia", required = false) Long IdDependencia, @RequestParam(name = "activo") Integer activo
-    ) throws Exception {
-        Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
-        var pageable = PageRequest.of(from, to);
-        return atencionRepository.findAllByDependencia(pageable, IdDependencia, activo);
+    @GetMapping("/test")
+    public Object getAllAtenciones(Authentication authentication,HttpSession session) throws Exception {
+       /*  List<String> messages = (List<String>) session.getAttribute("MY_SESSION_MESSAGES");
+		if (messages == null) {
+			messages = new ArrayList<>();
+            messages.add(""+new java.util.Date());
+		}*/
+		//model.addAttribute("sessionMessages", messages);
+        User userDetails = (User) authentication.getPrincipal();
+       // session.setAttribute("MY_SESSION_MESSAGES","test");
+        return "hello "+userDetails!=null?userDetails.getUsername():"NULL!";
     }
 
-    @GetMapping("/demo/{from}/{to}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Page getAllAtenciones(Authentication authentication, @PathVariable(value = "from") int from, @PathVariable(value = "to") int to, @RequestParam(name = "dependencia", required = false) Long IdDependencia, @RequestParam(name = "activo") Integer activo
+    @Autowired
+    private ContractService contractService;
+
+    @GetMapping("/{from}/{to}")
+    @PreAuthorize("hasAuthority('REGISTER_ATENCION_CIUDADANA')")
+    public Page getAllAtenciones(Authentication authentication,@PathVariable(value = "from") int from, @PathVariable(value = "to") int to,
+                                 @RequestParam(name = "dependencia", required = false) Long dependenciaId, 
+                                 @RequestParam(name = "activo", required = false, defaultValue = "1") Integer activo
     ) throws Exception {
-
         User userDetails = (User) authentication.getPrincipal();
-        userDetails.getDirectory();
-//        userDetails.getAuthorities().contains();
-        System.out.println(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("GRAND_1")));
-
-        Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
-        var pageable = PageRequest.of(from, to);
-        return atencionRepository.findAllByDependencia(pageable, IdDependencia, activo);
+        Integer directory=userDetails.getDirectory();
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "id"));
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN_ATENCION_CIUDADANA"))) {
+            List contracts=contractService.getContracts(directory);
+            return atencionRepository.findAllByDependencia(PageRequest.of(from, to,sort), dependenciaId, activo);
+        }else{
+            return atencionRepository.findAllByDependencia(PageRequest.of(from, to,sort), dependenciaId, activo);
+        }
     }
 
     @GetMapping("/{id}")
@@ -65,50 +81,43 @@ public class AtencionController {
     }
 
     @GetMapping("/search/dependencia/{id}")
-    public List<Atencion> getAtencionesByIdDependencia(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+    public List<Atencion> getAtencionesBydependenciaId(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
         List<Atencion> l = atencionRepository.findByDependenciaId(id);
         return l;
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('REGISTER_ATENCION_CIUDADANA')")
     public Atencion createAtencion(@Valid @RequestBody Atencion atencion) {
-        System.out.println(atencion.getDependencia());
         return atencionRepository.save(atencion);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Atencion> updateAtencion(@PathVariable(value = "id") Long atencionId, @Valid @RequestBody Atencion atencionDetalles) throws ResourceNotFoundException {
+    @PreAuthorize("hasAuthority('REGISTER_ATENCION_CIUDADANA')")
+    public ResponseEntity<Atencion> updateAtencion(@PathVariable(value = "id") Long atencionId, @Valid @RequestBody Atencion atencionData) throws ResourceNotFoundException {
         Atencion atencion = atencionRepository.findById(atencionId).orElseThrow(() -> new ResourceNotFoundException("Atencion no encontrada: " + atencionId));
 
-        if (atencionDetalles.getNroatencion() != null)
-            atencion.setNroatencion(atencionDetalles.getNroatencion());
+        if (atencionData.getNroatencion() != null)
+            atencion.setNroatencion(atencionData.getNroatencion());
+        if (atencionData.getNroExpediente() != null)
+            atencion.setNroExpediente(atencionData.getNroExpediente());
+        if (atencionData.getMotivo() != null)
+            atencion.setMotivo(atencionData.getMotivo());
+        if (atencionData.getHoraIni() != null)
+            atencion.setHoraIni(atencionData.getHoraIni());
+        if (atencionData.getHoraFin() != null)
+            atencion.setHoraFin(atencionData.getHoraFin());
+        if (atencionData.getFecha() != null)
+            atencion.setFecha(atencionData.getFecha());
 
-        //if (atencionDetalles.getNrosisgedo() != null)
-        //    atencion.setNrosisgedo(atencionDetalles.getNrosisgedo());
+        if (atencionData.getDependencia() != null)
+            atencion.setDependencia(atencionData.getDependencia());
 
-        if (atencionDetalles.getNroexpediente() != null)
-            atencion.setNroexpediente(atencionDetalles.getNroexpediente());
+        if (atencionData.getPersona() != null)
+            atencion.setPersona(atencionData.getPersona());
 
-        if (atencionDetalles.getMotivo() != null)
-            atencion.setMotivo(atencionDetalles.getMotivo());
-
-        if (atencionDetalles.getHoraini() != null)
-            atencion.setHoraini(atencionDetalles.getHoraini());
-
-        if (atencionDetalles.getHorafin() != null)
-            atencion.setHorafin(atencionDetalles.getHorafin());
-
-        if (atencionDetalles.getFecha() != null)
-            atencion.setFecha(atencionDetalles.getFecha());
-
-        if (atencionDetalles.getDependencia() != null)
-            atencion.setDependencia(atencionDetalles.getDependencia());
-
-        if (atencionDetalles.getPersona() != null)
-            atencion.setPersona(atencionDetalles.getPersona());
-
-        if (atencionDetalles.getActivo() != null)
-            atencion.setActivo(atencionDetalles.getActivo());
+        if (atencionData.getActivo() != null)
+            atencion.setActivo(atencionData.getActivo());
 
         atencion.setUpdatedAt(new Date());
         Atencion updatedAtencion = atencionRepository.save(atencion);
@@ -116,6 +125,7 @@ public class AtencionController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('REGISTER_ATENCION_CIUDADANA')")
     public Map<String, Boolean> deleteAtencion(@PathVariable(value = "id") Long atencionId) throws Exception {
         Atencion atencion = atencionRepository.findById(atencionId).orElseThrow(() -> new ResourceNotFoundException("Atencion no encontrada: " + atencionId));
 

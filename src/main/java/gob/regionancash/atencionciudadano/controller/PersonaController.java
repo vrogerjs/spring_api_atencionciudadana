@@ -43,33 +43,33 @@ public class PersonaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Persona> updatePersona(@PathVariable(value = "id") Long personaId, @Valid @RequestBody Persona personaDetalles) throws ResourceNotFoundException {
+    public ResponseEntity<Persona> updatePersona(@PathVariable(value = "id") Long personaId, @Valid @RequestBody Persona personaData) throws ResourceNotFoundException {
 
         Persona persona = personaRepository.findById(personaId).orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada: " + personaId));
 
-        if (personaDetalles.getTipoPersona() != null)
-            persona.setTipoPersona(personaDetalles.getTipoPersona());
+        if (personaData.getTipoPersona() != null)
+            persona.setTipoPersona(personaData.getTipoPersona());
 
-        if (personaDetalles.getTipoDocumento() != null)
-            persona.setTipoDocumento(personaDetalles.getTipoDocumento());
+        if (personaData.getTipoDocumento() != null)
+            persona.setTipoDocumento(personaData.getTipoDocumento());
 
-        if (personaDetalles.getNroDocumento() != null)
-            persona.setNroDocumento(personaDetalles.getNroDocumento());
+        if (personaData.getNroDocumento() != null)
+            persona.setNroDocumento(personaData.getNroDocumento());
 
-        if (personaDetalles.getNombape() != null)
-            persona.setNombape(personaDetalles.getNombape());
+        if (personaData.getApellidoNombre() != null)
+            persona.setApellidoNombre(personaData.getApellidoNombre());
 
-        if (personaDetalles.getRazonsocial() != null)
-            persona.setRazonsocial(personaDetalles.getRazonsocial());
+        if (personaData.getRazonSocial() != null)
+            persona.setRazonSocial(personaData.getRazonSocial());
 
-        if (personaDetalles.getRepresentantelegal() != null)
-            persona.setRepresentantelegal(personaDetalles.getRepresentantelegal());
+        if (personaData.getRepresentanteLegal() != null)
+            persona.setRepresentanteLegal(personaData.getRepresentanteLegal());
 
-        if (personaDetalles.getDireccion() != null)
-            persona.setDireccion(personaDetalles.getDireccion());
+        if (personaData.getDireccion() != null)
+            persona.setDireccion(personaData.getDireccion());
 
-        if (personaDetalles.getCelular() != null)
-            persona.setCelular(personaDetalles.getCelular());
+        if (personaData.getCelular() != null)
+            persona.setCelular(personaData.getCelular());
 
         persona.setUpdatedAt(new Date());
         Persona updatedPersona = personaRepository.save(persona);

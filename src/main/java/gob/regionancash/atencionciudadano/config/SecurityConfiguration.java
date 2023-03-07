@@ -18,22 +18,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
+    static{
+        System.out.println("======SecurityConfiguration");
+    }
+
     private final JwtAuthenticationFilter jwtAuthFilter;
+    
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        System.out.println("=======securityFilterChain");
         http
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
+                .authorizeRequests()//.authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**", "/cronograma/**","/user/**","/dependencia/**","/persona/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //.and()
+                //.sessionManagement()
+               // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

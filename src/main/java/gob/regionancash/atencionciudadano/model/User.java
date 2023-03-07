@@ -29,9 +29,9 @@ public class User implements UserDetails{
     private long id;
 
     @Column(nullable = false)
-    private String nombape;
+    private String nApellidoNombre;
 
-    @Column(nullable = false, unique = true)
+    @Column(name="name",nullable = false, unique = true)
     private String name;
 
     @Column(nullable = true)
@@ -41,8 +41,8 @@ public class User implements UserDetails{
     private Integer directory;
 
     @ManyToOne
-    @JoinColumn(name="tipouser_id", nullable=false)
-    private Tipouser tipouser;
+    @JoinColumn(name="tipoUser_id", nullable=false)
+    private TipoUser tipoUser;
 
     @ManyToOne
     @JoinColumn(name="dependencia_id", nullable=false)
@@ -74,7 +74,7 @@ public class User implements UserDetails{
   
     @Override
     public String getUsername() {
-      return email;
+      return name;
     }
   
     @Override
