@@ -17,9 +17,8 @@ CLIENT_ID_OAUTH=
 CLIENT_SECRET_OAUTH=
 
 server.port=
-
+spring.jpa.hibernate.ddl-auto = create-drop
 #spring.jpa.show-sql=true
-
 #spring.jpa.properties.hibernate.format_sql=true
 
 local.server.port=
