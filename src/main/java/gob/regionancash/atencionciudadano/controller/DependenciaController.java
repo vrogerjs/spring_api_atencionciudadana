@@ -62,11 +62,11 @@ public class DependenciaController {
         if (dependenciaData.getAbreviatura() != null)
             dependencia.setAbreviatura(dependenciaData.getAbreviatura());
 
-        if (dependenciaData.getNApellidoNombreresponsable() != null)
-            dependencia.setNApellidoNombreresponsable(dependenciaData.getNApellidoNombreresponsable());
+        if (dependenciaData.getApellidoNombreResponsable() != null)
+            dependencia.setApellidoNombreResponsable(dependenciaData.getApellidoNombreResponsable());
 
-        if (dependenciaData.getCargoresponsable() != null)
-            dependencia.setCargoresponsable(dependenciaData.getCargoresponsable());
+        if (dependenciaData.getCargoResponsable() != null)
+            dependencia.setCargoResponsable(dependenciaData.getCargoResponsable());
 
         dependencia.setUpdatedAt(new Date());
         Dependencia updatedDependencia = dependenciaRepository.save(dependencia);

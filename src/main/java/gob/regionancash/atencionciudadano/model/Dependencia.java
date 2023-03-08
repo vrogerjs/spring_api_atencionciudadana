@@ -30,10 +30,10 @@ public class Dependencia {
     private String abreviatura;
 
     @Column(nullable = true, length = 256)
-    private String nApellidoNombreresponsable;
+    private String apellidoNombreResponsable;
 
     @Column(nullable = true, length = 256)
-    private String cargoresponsable;
+    private String cargoResponsable;
 
     @Column(nullable = false, length = 1)
     @Builder.Default
