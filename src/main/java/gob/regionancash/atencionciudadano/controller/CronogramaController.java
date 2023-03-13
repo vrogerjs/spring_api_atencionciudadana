@@ -130,6 +130,10 @@ public class CronogramaController {
 
     @PostMapping("")
     public Cronograma createCronograma(@Valid @RequestBody Cronograma cronograma) {
+        Dependencia dependencia = cronograma.getDependencia();
+        if (!dependenciaRepository.findById(dependencia.getId()).isPresent()) {
+            dependenciaRepository.save(dependencia);
+        }
         return cronogramaRepository.save(cronograma);
     }
 

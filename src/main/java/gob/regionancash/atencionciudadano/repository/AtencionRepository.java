@@ -18,10 +18,10 @@ import java.util.Optional;
 public interface AtencionRepository extends JpaRepository<Atencion, Long> {
 
     @Query("SELECT COUNT(a) FROM Atencion a WHERE a.dependencia=:dependencia and DATE(a.fecha) = DATE(:fecha)")
-    abstract int getCountByDependenciaAndDate(Dependencia dependencia,Date fecha);
+    abstract int getCountByDependenciaAndDate(Dependencia dependencia, Date fecha);
 
     @Query("SELECT a.fecha,a.horaIni FROM Atencion a WHERE a.dependencia=:dependencia and DATE(a.fecha) = DATE(:fecha)")
-    abstract List getCountByDependenciaAndDateAndFechaIni(Dependencia dependencia,Date fecha);
+    abstract List getCountByDependenciaAndDateAndFechaIni(Dependencia dependencia, Date fecha);
 
     abstract List<Atencion> findByPersona(Persona persona);
 
@@ -32,5 +32,5 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
     abstract List findByDependenciaId(int id);
 
     @Query("SELECT a FROM Atencion a WHERE a.activo=:activo AND (:dependenciaId IS NULL OR a.dependencia.id =:dependenciaId)")
-    Page findAllByDependencia(PageRequest pageable, Long dependenciaId, Integer activo);
+    Page findAllByDependencia(PageRequest pageable, Integer activo, Long dependenciaId);
 }

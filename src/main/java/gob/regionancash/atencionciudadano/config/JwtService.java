@@ -30,11 +30,12 @@ public class JwtService {
   @Value("${mp.jwt.verify.publickey.location}")
   private String publicKeyFile;
 
-  private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+  //private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
   public String getUsername(String token) {
     final Map claims = (Map)getClaims(token);
-    return (String)claims.get("name");
+    System.out.println(claims);
+    return (String)claims.get("user");
     //return getClaim(token, Claims::getSubject);
   }
 
@@ -50,6 +51,7 @@ public class JwtService {
 
   public boolean isTokenValid(String token, UserDetails userDetails) {
     final String username = getUsername(token);
+    System.out.println(userDetails.getUsername());
     return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
   }
 
@@ -58,7 +60,8 @@ public class JwtService {
   }
 
   private Date getExpiration(String token) {
-    return (Date)getClaims(token).get(Claims.EXPIRATION);//getClaim(token, Claims::getExpiration);
+
+    return (Date)((Claims)getClaims(token)).getExpiration();//.get(Claims.EXPIRATION);//getClaim(token, Claims::getExpiration);
   }
 
   public Map getClaims(String token) {
@@ -75,12 +78,12 @@ public class JwtService {
       throw new RuntimeException(e);
     }
   }
-
+/*
   private Key getSignInKey(String secretKey) {
     byte[] keyBytes = Decoders.BASE64.decode(secretKey != null ? secretKey : SECRET_KEY);
     return Keys.hmacShaKeyFor(keyBytes);
   }
-
+*/
   public static RSAPublicKey readPublicKey(File file) throws Exception {
     try (FileReader keyReader = new FileReader(file)) {
       PEMParser pemParser = new PEMParser(keyReader);

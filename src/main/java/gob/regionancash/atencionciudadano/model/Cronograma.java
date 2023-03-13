@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @ToString
 @Entity
-@Builder
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Table(name = "cronogramas")
 @EntityListeners(AuditingEntityListener.class)
 public class Cronograma {

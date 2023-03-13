@@ -33,13 +33,14 @@ public class ApplicationConfig {
 
           @Override
           public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
+              System.out.println("loadUserByUsername "+username);
           //username -> {
         
           //read from db info from user and permision
                 /*repository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));*/
             User u = new User();
+            u.setName(username);
             List<GrantedAuthority> authorities = new ArrayList<>();
             String[] perms = new String[]{};
             for (String perm : perms)

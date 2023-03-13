@@ -61,10 +61,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
 
         username = jwtService.getUsername(jwt);
-        
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            
-            
+
+
             User userDetails = (User) this.userDetailsService.loadUserByUsername(username);
             /*
              Save user info from token
@@ -79,7 +79,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtService.isTokenValid(jwt, userDetails)) {
 
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                for (String perm : accessService.perms(jwt))authorities.add(new SimpleGrantedAuthority(perm));
+                for (String perm : accessService.perms(jwt))
+                    if(perm.length()>0)
+                    authorities.add(new SimpleGrantedAuthority(perm));
+
+                //remove when production
+                authorities.add(new SimpleGrantedAuthority("REGISTER_ATENCION_CIUDADANA"));
+
                 userDetails.setAuthorities(authorities);
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
