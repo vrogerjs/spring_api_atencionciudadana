@@ -26,14 +26,17 @@ public class Dependencia {
     @Column(nullable = false, length = 256, unique = true)
     private String name;
 
-    @Column(nullable = true, length = 32)
+    @Column(length = 32)
     private String abreviatura;
 
-    @Column(nullable = true, length = 256)
+    @Column(length = 256)
     private String apellidoNombreResponsable;
 
-    @Column(nullable = true, length = 256)
+    @Column(length = 256)
     private String cargoResponsable;
+
+    @Column(length = 256)
+    private String emailResponsable;
 
     @Column(nullable = false, length = 1)
     @Builder.Default

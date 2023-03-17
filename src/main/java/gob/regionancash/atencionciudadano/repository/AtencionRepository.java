@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,6 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
     @Query("SELECT a FROM Atencion a WHERE a.dependencia.id =:id")
     abstract List findByDependenciaId(int id);
 
-    @Query("SELECT a FROM Atencion a WHERE a.activo=:activo AND (:dependenciaId IS NULL OR a.dependencia.id =:dependenciaId)")
-    Page findAllByDependencia(PageRequest pageable, Integer activo, Long dependenciaId);
+    @Query("SELECT a FROM Atencion a WHERE a.activo=:activo AND (:fecha IS NULL OR a.fecha=:fecha) AND (:dependenciaId IS NULL OR a.dependencia.id =:dependenciaId)")
+    Page findAllByDependencia(PageRequest pageable, Integer activo, Long dependenciaId, LocalDate fecha);
 }

@@ -20,6 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient.RequestBodySpe
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,9 @@ public class AtencionController {
     public Page getAllAtenciones(Authentication authentication, @PathVariable(value = "from") int from,
                                  @PathVariable(value = "to") int to,
                                  @RequestParam(name = "activo", required = false, defaultValue = "1") Integer activo,
-                                 @RequestParam(name = "dependencia", required = false) Long dependenciaId
+                                 @RequestParam(name = "dependencia", required = false) Long dependenciaId,
+                                 @RequestParam(name = "fecha", required = false) LocalDate fecha
+
     ) throws Exception {
         User userDetails = (User) authentication.getPrincipal();
         Integer directory = userDetails.getDirectory();
@@ -54,7 +57,7 @@ public class AtencionController {
 
         if (authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ADMIN_ATENCION_CIUDADANA"))) {
-            return atencionRepository.findAllByDependencia(PageRequest.of(from, to, sort), activo, dependenciaId);
+            return atencionRepository.findAllByDependencia(PageRequest.of(from, to, sort), activo, dependenciaId, fecha);
         } else {
             List<Map> contracts = contractService.getContracts(directory);
             if (dependenciaId == null || !contracts.stream().anyMatch((c) -> {
@@ -62,7 +65,7 @@ public class AtencionController {
             })) {
                 return Page.empty();
             }
-            return atencionRepository.findAllByDependencia(PageRequest.of(from, to, sort), activo, dependenciaId);
+            return atencionRepository.findAllByDependencia(PageRequest.of(from, to, sort), activo, dependenciaId, fecha);
         }
     }
 
