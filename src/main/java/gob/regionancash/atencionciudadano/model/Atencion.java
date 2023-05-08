@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class Atencion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = true, length = 16)
+    @Column(length = 16)
     private String nroatencion;
 
     //@Column(nullable = false, length = 16)
@@ -35,7 +36,7 @@ public class Atencion {
     @Column(nullable = false, length = 16)
     private String nroExpediente;
 
-    @Column(nullable = false, length = 2048)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String motivo;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
@@ -43,11 +44,37 @@ public class Atencion {
     private LocalTime horaIni;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    @Column(nullable = true, columnDefinition = "TIME")
+    @Column(columnDefinition = "TIME")
     private LocalTime horaFin;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @Column(columnDefinition = "TIME")
+    private LocalTime horaCancelar;
+
+    @Column(columnDefinition = "TEXT")
+    private String motivoCancelar;
 
     @Column(nullable = false, columnDefinition = "DATE")
     private LocalDate fecha;
+
+
+    @Column(length = 8)
+    private String nroDocumento1;
+
+    @Column(length = 512)
+    private String apellidoNombre1;
+
+    @Column(length = 8)
+    private String nroDocumento2;
+
+    @Column(length = 512)
+    private String apellidoNombre2;
+
+    @Column(length = 8)
+    private String nroDocumento3;
+
+    @Column(length = 512)
+    private String apellidoNombre3;
 
     @ManyToOne
     @JoinColumn(name="dependencia_id", nullable=false)
@@ -76,7 +103,6 @@ public class Atencion {
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = true)
     private Date updatedAt;
 
 

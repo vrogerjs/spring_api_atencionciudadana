@@ -53,6 +53,10 @@ public class Persona {
     private String direccion;
 
     @Size(max = 512)
+    @Column(nullable = true, length = 512)
+    private String email;
+
+    @Size(max = 512)
     @Column(nullable = true, length = 16)
     private String celular;
 

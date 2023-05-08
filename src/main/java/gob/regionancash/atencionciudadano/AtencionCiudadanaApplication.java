@@ -25,7 +25,7 @@ public class AtencionCiudadanaApplication {
         configuration.setHostName(redisHost);
         configuration.setPort(redisPort);
 		configuration.setUsername("default");
-		configuration.setPassword(org.springframework.data.redis.connection.RedisPassword.of("75dQYsXYKR5NLT0Amf56icbrVRRmeF1X"));
+		configuration.setPassword(org.springframework.data.redis.connection.RedisPassword.of("fldbLVEe5TEHcQgHHtxsAPNVWFlvYYIt"));
         return new JedisConnectionFactory(configuration);
     }
 }

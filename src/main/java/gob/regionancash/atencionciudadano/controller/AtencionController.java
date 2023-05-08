@@ -109,15 +109,16 @@ public class AtencionController {
             atencion.setHoraFin(atencionData.getHoraFin());
         if (atencionData.getFecha() != null)
             atencion.setFecha(atencionData.getFecha());
-
         if (atencionData.getDependencia() != null)
             atencion.setDependencia(atencionData.getDependencia());
-
         if (atencionData.getPersona() != null)
             atencion.setPersona(atencionData.getPersona());
-
         if (atencionData.getActivo() != null)
             atencion.setActivo(atencionData.getActivo());
+        if (atencionData.getHoraCancelar() != null)
+            atencion.setHoraCancelar(atencionData.getHoraCancelar());
+        if (atencionData.getMotivoCancelar() != null)
+            atencion.setMotivoCancelar(atencionData.getMotivoCancelar());
 
         atencion.setUpdatedAt(new Date());
         Atencion updatedAtencion = atencionRepository.save(atencion);
