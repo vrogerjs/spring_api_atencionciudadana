@@ -87,6 +87,18 @@ public class AtencionController {
         return l;
     }
 
+    @GetMapping("/report/fechas")
+    public List getCountByDependencia(@RequestParam(name = "fechaIni", required = false) LocalDate fechaIni, @RequestParam(name = "fechaFin", required = false) LocalDate fechaFin) throws ResourceNotFoundException {
+        List l = atencionRepository.getCountByDependencia(fechaIni, fechaFin);
+        return l;
+    }
+
+    @GetMapping("/report/dependencia/fechas")
+    public List getCountByDependenciaByRangoFechasById(@RequestParam(name = "IdDependencia", required = false) Integer IdDependencia,@RequestParam(name = "fechaIni", required = false) LocalDate fechaIni, @RequestParam(name = "fechaFin", required = false) LocalDate fechaFin) throws ResourceNotFoundException {
+        List l = atencionRepository.getCountByDependenciaByRangoFechasById(IdDependencia,fechaIni, fechaFin);
+        return l;
+    }
+
     @PostMapping("")
     public Atencion createAtencion(@Valid @RequestBody Atencion atencion) {
         return atencionRepository.save(atencion);

@@ -34,4 +34,10 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
 
     @Query("SELECT a FROM Atencion a WHERE a.activo=:activo AND (:fecha IS NULL OR a.fecha=:fecha) AND (:dependenciaId IS NULL OR a.dependencia.id =:dependenciaId)")
     Page findAllByDependencia(PageRequest pageable, Integer activo, Long dependenciaId, LocalDate fecha);
+
+    @Query("SELECT DISTINCT a.dependencia.name, COUNT(a.dependencia.id) FROM Atencion a WHERE a.fecha BETWEEN :fechaIni AND :fechaFin GROUP BY a.dependencia.id")
+    abstract List getCountByDependencia(LocalDate fechaIni, LocalDate fechaFin);
+
+    @Query("SELECT a.dependencia.name, COUNT(a.dependencia.id), a.fecha FROM Atencion a WHERE a.fecha BETWEEN :fechaIni AND :fechaFin AND a.dependencia.id=:IdDependencia GROUP BY a.fecha")
+    abstract List getCountByDependenciaByRangoFechasById(Integer IdDependencia,LocalDate fechaIni, LocalDate fechaFin);
 }
