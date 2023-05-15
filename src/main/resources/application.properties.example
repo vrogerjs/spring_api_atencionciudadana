@@ -10,14 +10,14 @@ spring.datasource.password =
 #spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 
 # Hibernate ddl auto (create, create-drop, validate, update)
-spring.jpa.hibernate.ddl-auto = update
+#spring.jpa.hibernate.ddl-auto = update
 mp.jwt.verify.publickey.location=C://Users/USUARIO-PC/Desktop/Roger/projects/key/publicKey.pem
 
 CLIENT_ID_OAUTH=
 CLIENT_SECRET_OAUTH=
 
 server.port=
-spring.jpa.hibernate.ddl-auto = update
+#spring.jpa.hibernate.ddl-auto = update
 #spring.jpa.show-sql=true
 #spring.jpa.properties.hibernate.format_sql=true
 
